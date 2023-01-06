@@ -2,11 +2,11 @@ package com.igti.netfilxapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.igti.netfilxapp.adapter.MainAdapter
 import com.igti.netfilxapp.adapter.MovieAdapter
+import com.igti.netfilxapp.model.Category
 import com.igti.netfilxapp.model.Movie
 
 class MainActivity : AppCompatActivity() {
@@ -14,23 +14,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val movies = mutableListOf<Movie>()
-
-        for (i in 0 until 5) {
-            val movie = Movie(R.drawable.movie)
-            movies.add(movie)
+        val categories = mutableListOf<Category>()
+        for (i in 1 until 6) {
+            val movies = mutableListOf<Movie>()
+            for (j in 1 until 11) {
+                val movie = Movie(R.drawable.movie)
+                movies.add(movie)
+            }
+            val category = Category("Category $i", movies)
+            categories.add(category)
         }
 
 
-        val rvMovie: RecyclerView = findViewById(R.id.rv_movie)
-        val adapter = MovieAdapter(movies)
 
-        rvMovie.adapter = adapter
-        rvMovie.layoutManager = LinearLayoutManager(
-            this,
-            RecyclerView.HORIZONTAL,
-            false
-        )
+        val rvCategory: RecyclerView = findViewById(R.id.rv_main)
+        val adapter = MainAdapter(categories)
+        rvCategory.adapter = adapter
+        rvCategory.layoutManager = LinearLayoutManager(this)
     }
 
 
