@@ -24,9 +24,13 @@ class MainActivity : AppCompatActivity() {
 
         val rvMovie: RecyclerView = findViewById(R.id.rv_movie)
         val adapter = MovieAdapter(movies)
-        rvMovie.adapter = adapter
-        rvMovie.layoutManager = LinearLayoutManager(this)
 
+        rvMovie.adapter = adapter
+        rvMovie.layoutManager = LinearLayoutManager(
+            this,
+            RecyclerView.HORIZONTAL,
+            false
+        )
     }
 
 
