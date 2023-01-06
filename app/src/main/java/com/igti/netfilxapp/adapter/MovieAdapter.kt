@@ -43,7 +43,7 @@ class MovieAdapter(
 
         fun bind(movie: Movie) {
             val imageCover = itemView.findViewById<ImageView>(R.id.image_cover)
-            imageCover.setImageResource(movie.coverURL)
+//            imageCover.setImageResource(movie.coverURL)
         }
 
     }
