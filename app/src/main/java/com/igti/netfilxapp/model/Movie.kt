@@ -1,3 +1,7 @@
 package com.igti.netfilxapp.model
 
-data class Movie(val coverURL: String)
+import androidx.annotation.DrawableRes
+
+data class Movie(
+    @DrawableRes val coverURL: Int
+)
