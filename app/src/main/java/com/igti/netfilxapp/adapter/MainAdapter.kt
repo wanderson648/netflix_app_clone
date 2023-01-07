@@ -49,7 +49,7 @@ class MainAdapter(
             txtTitle.text = category.name
 
             val rvCategory = itemView.findViewById<RecyclerView>(R.id.rv_category)
-            rvCategory.adapter = MovieAdapter(category.movies)
+            rvCategory.adapter = MovieAdapter(category.movies, R.layout.movie_item)
             rvCategory.layoutManager = LinearLayoutManager(
                 itemView.context,
                 RecyclerView.HORIZONTAL,

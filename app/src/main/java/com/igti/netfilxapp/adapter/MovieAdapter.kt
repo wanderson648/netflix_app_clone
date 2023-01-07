@@ -5,12 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.igti.netfilxapp.R
 import com.igti.netfilxapp.model.Movie
 
 class MovieAdapter(
-    private val movies: List<Movie>
+    private val movies: List<Movie>,
+    @LayoutRes private val layoutId: Int
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -19,7 +21,7 @@ class MovieAdapter(
     ): MovieAdapter.MovieViewHolder {
 
         val movieView = LayoutInflater.from(parent.context).inflate(
-            R.layout.movie_item,
+            layoutId,
             parent,
             false
         )
