@@ -1,5 +1,6 @@
 package com.igti.netfilxapp.adapter
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.igti.netfilxapp.R
 import com.igti.netfilxapp.model.Movie
+import com.igti.netfilxapp.util.DownloadImageTask
 import com.squareup.picasso.Picasso
 
 class MovieAdapter(
@@ -46,10 +48,13 @@ class MovieAdapter(
 
         fun bind(movie: Movie) {
             val imageCover = itemView.findViewById<ImageView>(R.id.image_cover)
-//
-            Picasso.get()
-                .load(movie.coverURL)
-                .into(imageCover)
+
+            DownloadImageTask(object : DownloadImageTask.Callback{
+                override fun onResult(bitmap: Bitmap) {
+                    imageCover.setImageBitmap(bitmap)
+                }
+            }).execute(movie.coverURL)
+
         }
 
     }
