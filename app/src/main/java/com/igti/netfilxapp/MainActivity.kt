@@ -1,7 +1,7 @@
 package com.igti.netfilxapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -15,6 +15,8 @@ import com.igti.netfilxapp.util.CategoryTask
 class MainActivity : AppCompatActivity(), CategoryTask.Callback {
 
     private lateinit var progressBar: ProgressBar
+    private lateinit var adapter: MainAdapter
+    private val categories = mutableListOf<Category>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +24,11 @@ class MainActivity : AppCompatActivity(), CategoryTask.Callback {
 
         progressBar = findViewById(R.id.progress_main)
 
-        val categories = mutableListOf<Category>()
-
         val rvCategory: RecyclerView = findViewById(R.id.rv_main)
-        val adapter = MainAdapter(categories)
+        adapter = MainAdapter(categories)
         rvCategory.adapter = adapter
         rvCategory.layoutManager = LinearLayoutManager(this)
+
 
         CategoryTask(this).execute("https://api.tiagoaguiar.co/netflixapp/home?apiKey=9d261bbe-fc91-4159-b2e8-51a70a1d4e8a")
 
@@ -37,8 +38,12 @@ class MainActivity : AppCompatActivity(), CategoryTask.Callback {
         progressBar.visibility = View.VISIBLE
     }
 
-    override fun onResult(category: List<Category>) {
-        Log.i("Test Activity", "onResult: $category")
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResult(categories: List<Category>) {
+        this.categories.clear()
+        this.categories.addAll(categories)
+        adapter.notifyDataSetChanged()
+
         progressBar.visibility = View.GONE
     }
 
@@ -48,6 +53,7 @@ class MainActivity : AppCompatActivity(), CategoryTask.Callback {
             message,
             Toast.LENGTH_LONG
         ).show()
+        progressBar.visibility = View.GONE
     }
 
 

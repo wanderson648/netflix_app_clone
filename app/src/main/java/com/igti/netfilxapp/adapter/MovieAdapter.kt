@@ -9,6 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.igti.netfilxapp.R
 import com.igti.netfilxapp.model.Movie
+import com.squareup.picasso.Picasso
 
 class MovieAdapter(
     private val movies: List<Movie>,
@@ -45,7 +46,10 @@ class MovieAdapter(
 
         fun bind(movie: Movie) {
             val imageCover = itemView.findViewById<ImageView>(R.id.image_cover)
-//            imageCover.setImageResource(movie.coverURL)
+//
+            Picasso.get()
+                .load(movie.coverURL)
+                .into(imageCover)
         }
 
     }
