@@ -1,6 +1,9 @@
 package com.igti.netfilxapp.util
 
 import android.util.Log
+import com.igti.netfilxapp.model.Category
+import com.igti.netfilxapp.model.Movie
+import org.json.JSONObject
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -16,9 +19,13 @@ class CategoryTask {
         val executor = Executors.newSingleThreadExecutor()
 
         executor.execute {
+            var urlConnection: HttpsURLConnection? = null
+            var buffer: BufferedInputStream? = null
+            var stream: InputStream? = null
+
             try {
                 val requestURL = URL(url)
-                val urlConnection = requestURL.openConnection() as HttpsURLConnection
+                urlConnection = requestURL.openConnection() as HttpsURLConnection
                 urlConnection.readTimeout = 2000
                 urlConnection.connectTimeout = 2000
 
@@ -27,20 +34,50 @@ class CategoryTask {
                     throw IOException("Erro na comunicação com o servidor")
                 }
 
-                val stream = urlConnection.inputStream
+                stream = urlConnection.inputStream
 
 //                val jsonAsString = stream.bufferedReader().use { it.readText() }
 
-                val buffer = BufferedInputStream(stream)
+                buffer = BufferedInputStream(stream)
                 val jsonAsString = toString(buffer)
-                Log.i("Test", jsonAsString)
-                
+
+
+                val categories = toCategories(jsonAsString)
 
             } catch (e: IOException) {
                 Log.e("Test", e.message ?: "Erro desconhecido", e)
+            } finally {
+                urlConnection?.disconnect()
+                stream?.close()
+                buffer?.close()
             }
 
         }
+    }
+
+    private fun toCategories(jsonAsString: String): List<Category> {
+        val categories = mutableListOf<Category>()
+
+        val jsonRoot = JSONObject(jsonAsString)
+        val jsonCategories = jsonRoot.getJSONArray("category")
+        for (i in 0 until jsonCategories.length()) {
+            val jsonCategory = jsonCategories.getJSONObject(i)
+
+            val title = jsonCategory.getString("title")
+            val jsonMovies = jsonCategory.getJSONArray("movie")
+
+            val movies = mutableListOf<Movie>()
+            for (j in 0 until jsonMovies.length()) {
+                val jsonMovie = jsonMovies.getJSONObject(j)
+                val id = jsonMovie.getInt("id")
+                val coverUrl = jsonMovie.getString("cover_url")
+
+                movies.add(Movie(id, coverUrl))
+            }
+            categories.add(Category(title, movies))
+        }
+
+        return categories
     }
 
     private fun toString(stream: InputStream): String {
@@ -49,7 +86,7 @@ class CategoryTask {
         var read: Int
         while (true) {
             read = stream.read(bytes)
-            if(read <= 0) {
+            if (read <= 0) {
                 break
             }
             baos.write(bytes, 0, read)
