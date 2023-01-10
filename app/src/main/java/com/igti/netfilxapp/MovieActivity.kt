@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.igti.netfilxapp.adapter.MovieAdapter
+import com.igti.netfilxapp.adapters.MovieAdapter
 import com.igti.netfilxapp.model.Movie
 
 class MovieActivity : AppCompatActivity() {

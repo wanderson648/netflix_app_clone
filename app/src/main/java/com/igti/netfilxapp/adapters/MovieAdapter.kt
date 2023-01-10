@@ -1,26 +1,23 @@
-package com.igti.netfilxapp.adapter
+package com.igti.netfilxapp.adapters
 
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.igti.netfilxapp.R
 import com.igti.netfilxapp.model.Movie
 import com.igti.netfilxapp.util.DownloadImageTask
-import com.squareup.picasso.Picasso
 
 class MovieAdapter(
     private val movies: List<Movie>,
-    @LayoutRes private val layoutId: Int
+    @LayoutRes private val layoutId: Int,
+    private val onItemClickListener: ( (Int) -> Unit )? = null
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int
     ): MovieAdapter.MovieViewHolder {
 
         val movieView = LayoutInflater.from(parent.context).inflate(
@@ -48,6 +45,10 @@ class MovieAdapter(
 
         fun bind(movie: Movie) {
             val imageCover = itemView.findViewById<ImageView>(R.id.image_cover)
+
+            imageCover.setOnClickListener {
+                onItemClickListener?.invoke(movie.id)
+            }
 
             DownloadImageTask(object : DownloadImageTask.Callback{
                 override fun onResult(bitmap: Bitmap) {
